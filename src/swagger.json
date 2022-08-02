@@ -1,0 +1,347 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Desafio Introdução ao SOLID",
+        "Description": "This is an API Intruduction on SOLID",
+        "version": "1.0.0",
+        "contact": {
+            "email": "cicerocav@gmail.com"
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["User"],
+                "summary":"Create a user",
+                "description": "Create a new user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example":{
+                                    "name": "Cicero Melo",
+                                    "email": "cicerocav@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type":"string",
+                                            "format": "byte"
+                                        },
+                                        "admin":{
+                                            "type": "boolean"
+                                        },
+                                        "created_at":{
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at":{
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                        "id": "41c9e974-2a21-4066-90d1-7a69e8cf0421",
+                                        "admin": false,
+                                        "created_at": "2022-08-02T00:46:35.000Z",
+                                        "updated_at": "2022-08-02T00:46:35.000Z",
+                                        "name": "Cicero Melo",
+                                        "email": "cicerocav@gmail.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User already exists",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                        "error": "User already exists"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            },
+            "get": {
+                "tags": ["User"],
+                "summary":"List all users",
+                "description": "List All users",
+                "parameters":[{
+                    "name": "user_id",
+                    "in": "header",
+                    "description": "A valid user id, with administrative permission ",
+                    "required": true,
+                    "schema":{
+                        "type": "string"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "List all users",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items": {
+                                        "type":"object",
+                                        "properties": {
+                                            "id": {
+                                                "type":"string",
+                                                "format": "byte"
+                                            },
+                                            "admin":{
+                                                "type": "boolean"
+                                            },
+                                            "created_at":{
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at":{
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            }
+                                        }
+
+                                    },
+                                    "example":[{
+                                        "id": "41c9e974-2a21-4066-90d1-7a69e8cf0411",
+                                        "admin": false,
+                                        "created_at": "2022-08-01T00:46:35.000Z",
+                                        "updated_at": "2022-08-01T00:46:35.000Z",
+                                        "name": "Cicero Melo",
+                                        "email": "cicerocav@gmail.com"
+                                    },
+                                    {
+                                        "id": "41c9e974-2a21-4066-90d1-7a69e8cf0422",
+                                        "admin": false,
+                                        "created_at": "2022-08-01T00:46:35.000Z",
+                                        "updated_at": "2022-08-01T00:46:35.000Z",
+                                        "name": "Cicero Melo V1",
+                                        "email": "cicerocavV1@gmail.com"
+                                    }]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User not authorized for this role",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                        "error": "User not authorized for this role"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }           
+        },
+        "/users/{user_id}/admin" :{
+            "patch": {
+                "tags": ["User"],
+                "summary":"Define user admin",
+                "description": "Define user admin",
+                "parameters":[{
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "A valid user id ",
+                    "required": true,
+                    "schema":{
+                        "type": "string"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User defined sucess",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type":"string",
+                                            "format": "byte"
+                                        },
+                                        "admin":{
+                                            "type": "boolean"
+                                        },
+                                        "created_at":{
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at":{
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                        "id": "41c9e974-2a21-4066-90d1-7a69e8cf0421",
+                                        "admin": true,
+                                        "created_at": "2022-08-02T00:46:35.000Z",
+                                        "updated_at": "2022-08-02T00:46:35.000Z",
+                                        "name": "Cicero Melo",
+                                        "email": "cicerocav@gmail.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not exists",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                        "error": "User not exists"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        },
+        "/users/{user_id}" :{
+            "get": {
+                "tags": ["User"],
+                "summary":"Get a user by id",
+                "description": "Get a user by id",
+                "parameters":[{
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "A valid user id ",
+                    "required": true,
+                    "schema":{
+                        "type": "string"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User return sucess",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type":"string",
+                                            "format": "byte"
+                                        },
+                                        "admin":{
+                                            "type": "boolean"
+                                        },
+                                        "created_at":{
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at":{
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                        "id": "41c9e974-2a21-4066-90d1-7a69e8cf0421",
+                                        "admin": true,
+                                        "created_at": "2022-08-02T00:46:35.000Z",
+                                        "updated_at": "2022-08-02T00:46:35.000Z",
+                                        "name": "Cicero Melo",
+                                        "email": "cicerocav@gmail.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not exists",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example":{
+                                        "error": "User not exists"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
